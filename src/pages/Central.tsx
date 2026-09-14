@@ -9,6 +9,7 @@ import { ErrorState, EmptyState } from '../components/feedback/EmptyState'
 import { mockTeams } from '../lib/mockData'
 import { CentralNav } from '../components/dashboard/CentralNav'
 import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
+import { ScoringExplainer } from '../components/dashboard/ScoringExplainer'
 
 type TeamTotal = { team_id: string; team_name: string; total_points: number | null }
 const number = new Intl.NumberFormat('en-US')
@@ -70,6 +71,7 @@ export function Central() {
         <CentralNav />
         <ReadinessPanel demo={DEMO_MODE} unavailable={totalsQuery.isError} />
       </div>
+      <ScoringExplainer />
 
       {totalsQuery.isLoading ? (
         <BoardPanel><div className="space-y-3"><Skeleton variant="total" /><Skeleton variant="row" /><Skeleton variant="row" /></div></BoardPanel>

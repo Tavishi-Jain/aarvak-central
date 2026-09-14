@@ -18,6 +18,7 @@ import { Submit } from './pages/Submit'
 import { Admin } from './pages/Admin'
 import { Notifications } from './pages/Notifications'
 import { Analytics } from './pages/Analytics'
+import { Chat } from './pages/Chat'
 import { NotFound } from './pages/Placeholders'
 import { TEAMS } from './config/teams'
 import { PublicOnly, RequireAuth, RequireProfile, RequireRole } from './guards/RouteGuards'
@@ -53,6 +54,7 @@ export function App() {
           <Route path="/profile" element={<RequireProfile><Profile /></RequireProfile>} />
           <Route path="/notifications" element={DEMO_MODE ? <Notifications /> : <RequireProfile><Notifications /></RequireProfile>} />
           <Route path="/analytics" element={DEMO_MODE ? <Analytics /> : <RequireProfile><Analytics /></RequireProfile>} />
+          <Route path="/chat" element={DEMO_MODE ? <Chat /> : <RequireProfile><Chat /></RequireProfile>} />
 
           {/* Core-member booth routes. */}
           <Route path="/review" element={<RequireRole minRole="core"><Review /></RequireRole>} />

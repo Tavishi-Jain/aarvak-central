@@ -1,4 +1,4 @@
-import { BarChart3, Bell, LayoutDashboard } from 'lucide-react'
+import { BarChart3, Bell, LayoutDashboard, MessageCircle } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { DEMO_MODE } from '../../supabase'
 
@@ -10,6 +10,7 @@ export function CentralNav() {
     { href: `/central${suffix}`, label: 'Standings', icon: LayoutDashboard },
     { href: `/analytics${suffix}`, label: 'Activity', icon: BarChart3 },
     { href: `/notifications${suffix}`, label: 'Inbox', icon: Bell },
+    { href: `/chat${suffix}`, label: 'Chat', icon: MessageCircle },
   ]
 
   return (

@@ -12,6 +12,7 @@ import { Avatar } from '../components/media/Avatar'
 import { mockTeams } from '../lib/mockData'
 import { CentralNav } from '../components/dashboard/CentralNav'
 import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
+import { ScoringExplainer } from '../components/dashboard/ScoringExplainer'
 
 type Detail = {
   team: { id: string; name: string; slug: string; total_points: number | null }
@@ -58,6 +59,7 @@ export function CentralTeam({ hardcodedTeamId }: { hardcodedTeamId?: string }) {
         <CentralNav />
         <ReadinessPanel demo={DEMO_MODE} />
       </div>
+      <ScoringExplainer />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3"><div className="stat-card"><Users size={17} className="text-cyan" /><span className="label text-muted">Crew</span><strong>{members.length}</strong></div><div className="stat-card"><CheckCircle2 size={17} className="text-posted" /><span className="label text-muted">Activities</span><strong>{feed.length}</strong></div><div className="stat-card col-span-2 sm:col-span-1"><CalendarDays size={17} className="text-amber" /><span className="label text-muted">Latest signal</span><strong className="text-lg">{feed[0] ? date(feed[0].date) : '—'}</strong></div></div>
       <BoardPanel padded={false}><div className="border-b border-seam px-panel py-5"><p className="label text-lamp">The crew</p><h2 className="mt-2 font-display text-xl font-bold text-chalk">People behind the points</h2></div>{members.length ? <div className="grid gap-2 p-3 sm:grid-cols-2 sm:p-5">{members.map(member => <div key={member.id} className="member-card"><Avatar name={member.full_name} size="sm" /><div className="min-w-0"><strong className="block truncate text-sm text-chalk">{member.full_name}</strong><span className="text-xs text-muted">{member.sprint_track || 'Track not listed'}</span></div><span className="ml-auto label text-dim" title="Individual totals are private">PRIVATE</span></div>)}</div> : <EmptyState headline="No members listed" body="This team has not published its crew yet." />}</BoardPanel>
       <BoardPanel padded={false}><div className="border-b border-seam px-panel py-5"><p className="label text-lamp">Public activity</p><h2 className="mt-2 font-display text-xl font-bold text-chalk">Signals from the team</h2></div>{feed.length ? <div className="divide-y divide-seam">{feed.map(row => <div key={row.id} className="activity-row"><Avatar name={row.member_name} size="sm" /><div className="min-w-0 flex-1"><strong className="block truncate text-sm text-chalk">{row.activity_name}</strong><span className="text-xs text-muted">{row.member_name}{row.activity_level ? ` · ${row.activity_level}` : ''} · {date(row.date)}</span></div><StatusPill status={row.status as any} size="sm" /><span className="w-14 text-right font-display text-sm font-bold text-chalk">{row.points === null ? '—' : `+${row.points}`}</span></div>)}</div> : <EmptyState headline="No activity yet" body="The first verified signal will appear here." />}</BoardPanel>
