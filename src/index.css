@@ -36,6 +36,93 @@ select optgroup {
 }
 }
 @layer components {
+  .tech-shell { position: relative; isolation: isolate; overflow: hidden; }
+  .tech-shell::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    opacity: .78;
+    background-image:
+      linear-gradient(rgba(53,214,255,.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,46,85,.12) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, black, black 75%, transparent 100%);
+    animation: gridDrift 18s linear infinite;
+  }
+  .tech-shell::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .28;
+    background: repeating-linear-gradient(to bottom, transparent 0 4px, rgba(255,255,255,.22) 5px, transparent 7px);
+    animation: scanDrift 12s linear infinite;
+  }
+  .tech-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .tech-orb { position: absolute; display: block; border: 1px solid rgba(53,214,255,.4); border-radius: 9999px; filter: blur(.2px); animation: orbFloat 12s ease-in-out infinite; }
+  .tech-orb::after { content: ''; position: absolute; inset: 18%; border: 1px solid rgba(255,46,85,.28); border-radius: inherit; }
+  .tech-orb--one { width: 28rem; height: 28rem; top: 5%; right: -9rem; background: radial-gradient(circle, rgba(53,214,255,.17), transparent 65%); box-shadow: 0 0 120px rgba(53,214,255,.22), inset 0 0 80px rgba(255,46,85,.12); }
+  .tech-orb--two { width: 19rem; height: 19rem; bottom: -5rem; left: -5rem; animation-delay: -5s; background: radial-gradient(circle, rgba(255,46,85,.18), transparent 68%); box-shadow: 0 0 100px rgba(255,46,85,.24); }
+  .tech-orb--three { width: 11rem; height: 11rem; top: 48%; left: 42%; animation-delay: -8s; background: radial-gradient(circle, rgba(255,194,77,.16), transparent 66%); border-color: rgba(255,194,77,.42); box-shadow: 0 0 70px rgba(255,194,77,.18); }
+  .tech-trace { position: absolute; width: 36rem; height: 2px; background: linear-gradient(90deg, transparent, rgba(53,214,255,.9), rgba(255,46,85,.8), transparent); transform: rotate(-28deg); animation: traceSweep 9s ease-in-out infinite; box-shadow: 0 0 16px rgba(53,214,255,.55); }
+  .tech-trace--one { top: 26%; left: -8rem; }
+  .tech-trace--two { bottom: 22%; right: -10rem; animation-delay: -4s; transform: rotate(28deg); }
+  .tech-particles { position: absolute; width: 3px; height: 3px; background: #B8FF5A; border-radius: 9999px; box-shadow: 80px 40px #35D6FF, 180px 120px #FF2E55, 300px 20px #FFC24D, 430px 180px #35D6FF, 560px 70px #B8FF5A, 680px 220px #FF2E55; animation: particleFlight 14s linear infinite; }
+  .tech-particles--one { top: 18%; left: 8%; }
+  .tech-particles--two { bottom: 16%; right: 8%; animation-delay: -7s; }
+  .central-hero, .team-hero {
+    @apply relative overflow-hidden rounded-panel border border-seam bg-enamel p-6 shadow-lifted sm:p-9;
+    background-image: linear-gradient(120deg, rgba(255,46,85,.09), transparent 48%), linear-gradient(180deg, rgba(255,255,255,.025), transparent);
+    animation: boardReveal 420ms ease-out both;
+  }
+  .central-hero__orb {
+    @apply absolute -right-16 -top-20 h-64 w-64 border border-lamp/20;
+    border-radius: 9999px;
+    box-shadow: 0 0 0 24px rgba(255,46,85,.025), 0 0 80px rgba(255,46,85,.15);
+  }
+  .central-hero__orb::after { content: ''; @apply absolute inset-10 border border-cyan/20; border-radius: 9999px; }
+  .team-hero { @apply flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between; }
+  .team-total { @apply flex min-w-[170px] flex-col border-l-2 border-lamp pl-4; }
+  .team-total strong { @apply mt-2 font-display text-4xl font-black leading-none text-white sm:text-5xl; text-shadow: 0 0 28px rgba(255,46,85,.3); }
+  .stat-card { @apply flex min-h-[112px] flex-col justify-between rounded-panel border border-seam bg-enamel p-4 shadow-slot transition-colors hover:border-lip; }
+  .stat-card svg { @apply mb-2; }
+  .stat-card strong { @apply font-display text-2xl font-bold text-chalk; }
+  .status-dot { @apply h-2 w-2 bg-posted; border-radius: 9999px; box-shadow: 0 0 10px #3BE8A6; }
+  .status-dot--preview { @apply bg-amber; box-shadow: 0 0 10px #FFC24D; }
+  .leaderboard-row { @apply flex min-h-[76px] w-full items-center gap-3 border-b border-seam px-2 text-left transition-all duration-200 last:border-0 hover:-translate-y-0.5 hover:border-lamp/40 hover:bg-lit focus-visible:relative sm:gap-5 sm:px-4; }
+  .leaderboard-row--first { @apply rounded-slot border border-lamp/30 bg-lamp/[.045] shadow-glow; }
+  .leaderboard-rank { @apply w-7 shrink-0 font-mono text-xs text-dim sm:w-9; }
+  .leaderboard-row--first .leaderboard-rank { @apply text-lamp; }
+  .leaderboard-team { @apply flex min-w-0 flex-1 items-center gap-3; }
+  .team-mark { @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-slot border border-lip bg-lit font-display font-bold text-chalk; }
+  .leaderboard-row--first .team-mark { @apply border-lamp/60 text-lamp; }
+  .leaderboard-team strong { @apply block truncate text-sm font-semibold text-chalk sm:text-base; }
+  .leaderboard-team small, .leaderboard-points small { @apply mt-0.5 block font-mono text-[10px] uppercase tracking-wider text-muted; }
+  .leaderboard-points { @apply text-right font-display text-lg font-bold tabular-nums text-chalk sm:text-xl; }
+  .leaderboard-arrow { @apply text-dim transition-transform group-hover:translate-x-1 group-hover:text-lamp; }
+  .team-accent--0 .team-mark { border-color: rgba(53,214,255,.55); color: #35D6FF; box-shadow: 0 0 18px rgba(53,214,255,.16); }
+  .team-accent--1 .team-mark { border-color: rgba(255,46,85,.55); color: #FF2E55; box-shadow: 0 0 18px rgba(255,46,85,.16); }
+  .team-accent--2 .team-mark { border-color: rgba(255,194,77,.55); color: #FFC24D; box-shadow: 0 0 18px rgba(255,194,77,.16); }
+  .team-accent--3 .team-mark { border-color: rgba(184,255,90,.55); color: #B8FF5A; box-shadow: 0 0 18px rgba(184,255,90,.16); }
+  .team-accent:hover .team-mark { transform: rotate(-6deg) scale(1.08); }
+  .team-mark { transition: transform 220ms ease, box-shadow 220ms ease, color 220ms ease; }
+  .team-hero--nexus { border-color: rgba(53,214,255,.45); }
+  .team-hero--cipher { border-color: rgba(255,46,85,.45); }
+  .team-hero--ascend { border-color: rgba(255,194,77,.45); }
+  .team-hero--echo { border-color: rgba(184,255,90,.45); }
+  .team-hero--byte-brigade { border-color: rgba(53,214,255,.45); }
+  .back-button { @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted transition-colors hover:text-chalk; }
+  .member-card { @apply flex items-center gap-3 rounded-slot border border-seam bg-lit/40 p-3 transition-all hover:-translate-y-0.5 hover:border-cyan/60 hover:bg-cyan/[.06]; }
+  .activity-row { @apply flex min-h-[72px] items-center gap-3 px-4 py-3 transition-all hover:bg-lit sm:gap-4 sm:px-5; }
+  @keyframes boardReveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scanDrift { from { transform: translateY(-12px); } to { transform: translateY(12px); } }
+  @keyframes gridDrift { from { background-position: 0 0, 0 0; } to { background-position: 34px 34px, 34px 34px; } }
+  @keyframes orbFloat { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(0, 18px, 0) scale(1.04); } }
+  @keyframes traceSweep { 0%, 100% { opacity: .15; transform: translateX(-8%) rotate(-28deg); } 50% { opacity: .65; transform: translateX(8%) rotate(-28deg); } }
+  @keyframes particleFlight { 0% { opacity: .2; transform: translate3d(0, 0, 0); } 45% { opacity: .9; } 100% { opacity: .15; transform: translate3d(42px, -36px, 0); } }
 
   /* ══ THE ECHO ═══════════════════════════════════════════════════════════
      A press emits the control's own silhouette three times, each return
@@ -192,7 +279,7 @@ select optgroup {
 
   /* ── status indicator ──────────────────────────────────────────────────
      A lit LED, never a filled chip. Colour plus a word, never colour alone. */
-  .led { @apply w-[7px] h-[7px] rounded-pill shrink-0; }
+  .led { @apply w-[7px] h-[7px] shrink-0; border-radius: 9999px; }
   .led-posted { background: #3BE8A6; box-shadow: 0 0 9px #3BE8A6; }
   .led-queue  { background: #FFC24D; box-shadow: 0 0 9px #FFC24D; }
   .led-back   { background: #35D6FF; box-shadow: 0 0 9px #35D6FF; }
@@ -203,7 +290,7 @@ select optgroup {
    The press still lights the border and still moves a pixel, so it is never
    silent. */
 @media (prefers-reduced-motion: reduce) {
-  .echo-wave, .echo-rest { display: none !important; }
+  .echo-wave, .echo-rest, .tech-orb, .tech-trace { display: none !important; }
 
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
