@@ -7,6 +7,8 @@ import { BoardPanel } from '../components/board/BoardPanel'
 import { Skeleton } from '../components/primitives/Skeleton'
 import { ErrorState, EmptyState } from '../components/feedback/EmptyState'
 import { mockTeams } from '../lib/mockData'
+import { CentralNav } from '../components/dashboard/CentralNav'
+import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
 
 type TeamTotal = { team_id: string; team_name: string; total_points: number | null }
 const number = new Intl.NumberFormat('en-US')
@@ -64,6 +66,10 @@ export function Central() {
         </div>
         <div className="central-hero__orb" aria-hidden="true" />
       </section>
+      <div className="flex flex-col gap-3">
+        <CentralNav />
+        <ReadinessPanel demo={DEMO_MODE} unavailable={totalsQuery.isError} />
+      </div>
 
       {totalsQuery.isLoading ? (
         <BoardPanel><div className="space-y-3"><Skeleton variant="total" /><Skeleton variant="row" /><Skeleton variant="row" /></div></BoardPanel>

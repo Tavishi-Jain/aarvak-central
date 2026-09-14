@@ -1,0 +1,37 @@
+import { BarChart3, Bell, LayoutDashboard } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import { DEMO_MODE } from '../../supabase'
+
+const suffix = DEMO_MODE ? '?demo=1' : ''
+
+export function CentralNav() {
+  const location = useLocation()
+  const links = [
+    { href: `/central${suffix}`, label: 'Standings', icon: LayoutDashboard },
+    { href: `/analytics${suffix}`, label: 'Activity', icon: BarChart3 },
+    { href: `/notifications${suffix}`, label: 'Inbox', icon: Bell },
+  ]
+
+  return (
+    <nav aria-label="Dashboard sections" className="flex items-center gap-1 overflow-x-auto rounded-slot border border-seam bg-recess/70 p-1">
+      {links.map(({ href, label, icon: Icon }) => {
+        const active = location.pathname === href.split('?')[0]
+        return (
+          <Link
+            key={href}
+            to={href}
+            aria-current={active ? 'page' : undefined}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-slot px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
+              active
+                ? 'bg-lamp text-void shadow-glow'
+                : 'text-muted hover:bg-lit hover:text-chalk'
+            }`}
+          >
+            <Icon size={14} aria-hidden="true" />
+            {label}
+          </Link>
+        )
+      })}
+    </nav>
+  )
+}
