@@ -36,7 +36,17 @@ select optgroup {
 }
 }
 @layer components {
-  .tech-shell { position: relative; isolation: isolate; overflow: hidden; }
+  .tech-shell {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-image:
+      linear-gradient(180deg, rgba(5,5,7,.74), rgba(5,5,7,.88)),
+      url('/assets/aarvak-dashboard-background.png');
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+  }
   .tech-shell::before {
     content: '';
     position: fixed;
@@ -61,6 +71,8 @@ select optgroup {
     background: repeating-linear-gradient(to bottom, transparent 0 4px, rgba(255,255,255,.22) 5px, transparent 7px);
     animation: scanDrift 12s linear infinite;
   }
+  .tech-shell > * { position: relative; }
+  .tech-shell > .tech-backdrop { position: fixed; }
   .tech-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
   .tech-orb { position: absolute; display: block; border: 1px solid rgba(53,214,255,.4); border-radius: 9999px; filter: blur(.2px); animation: orbFloat 12s ease-in-out infinite; }
   .tech-orb::after { content: ''; position: absolute; inset: 18%; border: 1px solid rgba(255,46,85,.28); border-radius: inherit; }
@@ -291,6 +303,7 @@ select optgroup {
    silent. */
 @media (prefers-reduced-motion: reduce) {
   .echo-wave, .echo-rest, .tech-orb, .tech-trace { display: none !important; }
+  .tech-shell { background-attachment: scroll; }
 
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
