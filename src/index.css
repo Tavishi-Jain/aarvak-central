@@ -82,6 +82,17 @@ select optgroup {
   .score-table tbody tr:hover { @apply bg-lit/60; }
   .score-table__points { @apply whitespace-nowrap font-display font-bold text-lamp; }
   .score-table--compact { @apply min-w-[480px]; }
+  .readiness-panel { background: rgba(5, 5, 7, .88); box-shadow: 0 12px 30px rgba(0, 0, 0, .2); }
+  .readability-strip { @apply rounded-slot border border-seam px-3 py-2; background: rgba(5, 5, 7, .78); }
+  .readability-strip .text-muted, .readiness-panel .text-muted { color: #D4D4DE; font-weight: 500; }
+  .readiness-panel .text-dim { color: #B8B8C6; font-weight: 600; }
+  .analytics-filters, .analytics-stat { background: rgba(5, 5, 7, .9); }
+  .analytics-filters .label, .analytics-stat .label { color: #E5E5EC; font-weight: 800; letter-spacing: .12em; }
+  .analytics-filters select, .analytics-filters input[type='date'] { background: #111118; color: #F2F2F5; border-color: rgba(242,242,245,.3); font-weight: 600; }
+  .analytics-filters select:focus-visible, .analytics-filters input[type='date']:focus-visible { border-color: #FFC24D; box-shadow: 0 0 0 3px rgba(255,194,77,.24); }
+  .analytics-stat .text-dim { color: #D4D4DE; font-weight: 700; }
+  .analytics-stat .text-muted { color: #D4D4DE; font-weight: 500; }
+  .central-hero .text-muted, .team-hero .text-muted { color: #D4D4DE; font-weight: 500; }
   .nav-badge { @apply ml-1 inline-flex min-w-4 items-center justify-center rounded-pill bg-amber px-1 text-[9px] font-black; color: #050507; }
   .leaderboard-row--first { animation: boardPulse 3s ease-in-out infinite; }
   @keyframes boardPulse { 0%, 100% { box-shadow: 0 0 0 rgba(255,194,77,0); } 50% { box-shadow: 0 0 24px rgba(255,194,77,.12); } }

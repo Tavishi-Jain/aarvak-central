@@ -3,7 +3,7 @@ import { AlertTriangle, CheckCircle2 } from 'lucide-react'
 export function ReadinessPanel({ demo, unavailable = false }: { demo: boolean; unavailable?: boolean }) {
   const ready = !demo && !unavailable
   return (
-    <div className={`flex items-start gap-3 rounded-panel border p-4 ${
+    <div className={`readiness-panel flex items-start gap-3 rounded-panel border p-4 ${
       ready ? 'border-posted/30 bg-posted/[.06]' : 'border-amber/35 bg-amber/[.07]'
     }`}>
       {ready ? <CheckCircle2 className="mt-0.5 shrink-0 text-posted" size={18} aria-hidden="true" /> : <AlertTriangle className="mt-0.5 shrink-0 text-amber" size={18} aria-hidden="true" />}
