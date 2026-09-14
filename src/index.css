@@ -75,6 +75,13 @@ select optgroup {
   .score-explainer { @apply overflow-hidden rounded-panel border border-seam bg-enamel/90 shadow-slot; }
   .score-explainer__toggle { @apply flex w-full items-start justify-between gap-4 p-4 text-left transition-colors hover:bg-lit focus-visible:bg-lit sm:p-5; }
   .score-explainer__body { @apply border-t border-seam px-4 pb-5 pt-4 sm:px-5; animation: boardReveal 260ms ease-out both; }
+  .score-table { @apply w-full min-w-[680px] border-collapse text-left text-xs; }
+  .score-table th { @apply border-b border-seam px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-dim; }
+  .score-table td { @apply border-b border-seam/70 px-3 py-2.5 align-top leading-5 text-chalk/80; }
+  .score-table tbody tr:last-child td { @apply border-b-0; }
+  .score-table tbody tr:hover { @apply bg-lit/60; }
+  .score-table__points { @apply whitespace-nowrap font-display font-bold text-lamp; }
+  .score-table--compact { @apply min-w-[480px]; }
   .tech-shell > .tech-backdrop { position: fixed; }
   .tech-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
   .tech-orb { position: absolute; display: block; border: 1px solid rgba(53,214,255,.4); border-radius: 9999px; animation: orbFloat 12s ease-in-out infinite; }
