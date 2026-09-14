@@ -12,6 +12,7 @@ import { Seam } from '../components/primitives/Seam'
 import { CentralNav } from '../components/dashboard/CentralNav'
 import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
 import { mockTeams } from '../lib/mockData'
+import { Breadcrumbs } from '../components/dashboard/Breadcrumbs'
 
 type Day = { activity_date: string; activity_count: number; member_count: number; team_count: number }
 type Week = { label: string; activity_count: number }
@@ -88,10 +89,12 @@ function LineChart({ weeks }: { weeks: Week[] }) {
 
 export function Analytics() {
   const navigate = useNavigate()
-  const [teamId, setTeamId] = useState('')
-  const [memberId, setMemberId] = useState('')
-  const [start, setStart] = useState(iso(defaultStart))
-  const [end, setEnd] = useState(iso(today))
+  const params = new URLSearchParams(window.location.search)
+  const [teamId, setTeamId] = useState(params.get('team') || '')
+  const [memberId, setMemberId] = useState(params.get('member') || '')
+  const [start, setStart] = useState(params.get('from') || iso(defaultStart))
+  const [end, setEnd] = useState(params.get('to') || iso(today))
+  const persist = (key: string, value: string) => { const next = new URLSearchParams(window.location.search); value ? next.set(key, value) : next.delete(key); window.history.replaceState(null, '', `${window.location.pathname}?${next.toString()}`) }
   const rosterQuery = useQuery({
     queryKey: ['analytics-roster'],
     queryFn: async () => {
@@ -136,14 +139,15 @@ export function Analytics() {
     <BoardLayout topbar={<div className="flex w-full items-center justify-between gap-4"><span className="font-display text-sm font-bold tracking-sign text-chalk">AARVAK TSJ 2026 DASHBOARD</span><TextButton onClick={() => navigate('/central' + (DEMO_MODE ? '?demo=1' : ''))}>Standings</TextButton></div>}>
       <div className="flex flex-col gap-stack">
         <CentralNav />
+        <Breadcrumbs current="Activity analytics" locked />
         <ReadinessPanel demo={DEMO_MODE} unavailable={analyticsQuery.isError} />
         <header><SignLabel>Activity signal</SignLabel><h1 className="mt-2 font-display text-3xl font-bold text-chalk">Approved activity, over time.</h1><p className="mt-2 max-w-2xl text-sm text-muted">Counts include verified submissions only. Private points and unrevealed scores are never returned.</p></header>
         <BoardPanel>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <label className="label">Team<select value={teamId} onChange={event => { setTeamId(event.target.value); setMemberId('') }} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm normal-case"><option value="">All teams</option>{teams.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
-            <label className="label">Member<select value={memberId} onChange={event => setMemberId(event.target.value)} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm normal-case"><option value="">All members</option>{members.map(row => <option key={row.member_id} value={row.member_id!}>{row.member_name}</option>)}</select></label>
-            <label className="label">From<input type="date" value={start} max={end} onChange={event => setStart(event.target.value)} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm" /></label>
-            <label className="label">To<input type="date" value={end} min={start} onChange={event => setEnd(event.target.value)} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm" /></label>
+            <label className="label">Team<select value={teamId} onChange={event => { setTeamId(event.target.value); setMemberId(''); persist('team', event.target.value); persist('member', '') }} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm normal-case"><option value="">All teams</option>{teams.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
+            <label className="label">Member<select value={memberId} onChange={event => { setMemberId(event.target.value); persist('member', event.target.value) }} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm normal-case"><option value="">All members</option>{members.map(row => <option key={row.member_id} value={row.member_id!}>{row.member_name}</option>)}</select></label>
+            <label className="label">From<input type="date" value={start} max={end} onChange={event => { setStart(event.target.value); persist('from', event.target.value) }} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm" /></label>
+            <label className="label">To<input type="date" value={end} min={start} onChange={event => { setEnd(event.target.value); persist('to', event.target.value) }} className="mt-2 w-full rounded-slot border border-seam bg-recess px-3 py-2 text-sm" /></label>
           </div>
         </BoardPanel>
         {analyticsQuery.isLoading ? <BoardPanel><Skeleton variant="total" /></BoardPanel> : analyticsQuery.isError ? <BoardPanel><ErrorState headline="Could not load analytics" body="The activity signal failed to load. Check your connection." retry={() => analyticsQuery.refetch()} /></BoardPanel> : days.length === 0 ? <BoardPanel><EmptyState headline="No approved activity yet" body="Try a wider date range or another team. Verified activity will appear here." /></BoardPanel> : <>

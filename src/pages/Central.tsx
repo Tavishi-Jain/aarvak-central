@@ -10,6 +10,7 @@ import { mockTeams } from '../lib/mockData'
 import { CentralNav } from '../components/dashboard/CentralNav'
 import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
 import { ScoringExplainer } from '../components/dashboard/ScoringExplainer'
+import { Breadcrumbs } from '../components/dashboard/Breadcrumbs'
 
 type TeamTotal = { team_id: string; team_name: string; total_points: number | null }
 const number = new Intl.NumberFormat('en-US')
@@ -67,6 +68,7 @@ export function Central() {
         </div>
         <div className="central-hero__orb" aria-hidden="true" />
       </section>
+      <Breadcrumbs current="Society standings" locked />
       <div className="flex flex-col gap-3">
         <CentralNav />
         <ReadinessPanel demo={DEMO_MODE} unavailable={totalsQuery.isError} />
@@ -102,7 +104,7 @@ export function Central() {
                   <span className="leaderboard-rank">{String(index + 1).padStart(2, '0')}</span>
                   <span className={`leaderboard-team team-accent team-accent--${index % 4}`}>
                     <span className="team-mark">{team.team_name.slice(0, 1)}</span>
-                    <span><strong>{team.team_name}</strong><small>{index === 0 ? 'Current leader' : 'Team standing'}</small></span>
+                    <span><strong>{team.team_name}</strong><small>{index === 0 ? 'Podium · current leader' : index < 3 ? `Podium · rank ${index + 1}` : 'Team standing'}</small></span>
                   </span>
                   <span className="leaderboard-points">{team.total_points === null ? '—' : number.format(team.total_points)}<small>PTS</small></span>
                   <ArrowRight size={18} className="leaderboard-arrow" aria-hidden="true" />

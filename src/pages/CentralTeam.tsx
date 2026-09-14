@@ -13,6 +13,8 @@ import { mockTeams } from '../lib/mockData'
 import { CentralNav } from '../components/dashboard/CentralNav'
 import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
 import { ScoringExplainer } from '../components/dashboard/ScoringExplainer'
+import { Breadcrumbs } from '../components/dashboard/Breadcrumbs'
+import { Share2 } from 'lucide-react'
 
 type Detail = {
   team: { id: string; name: string; slug: string; total_points: number | null }
@@ -45,6 +47,11 @@ export function CentralTeam({ hardcodedTeamId }: { hardcodedTeamId?: string }) {
   })
 
   const goBack = () => navigate('/central')
+  const shareTeam = async () => {
+    const url = window.location.href
+    if (navigator.share) await navigator.share({ title: `${teamId} team board`, url }).catch(() => undefined)
+    else await navigator.clipboard?.writeText(url)
+  }
   if (detailQuery.isLoading) return <BoardLayout><BoardPanel><div className="space-y-4"><Skeleton variant="total" /><Skeleton variant="row" /><Skeleton variant="row" /></div></BoardPanel></BoardLayout>
   if (detailQuery.isError || !detailQuery.data) return <BoardLayout topbar={<button className="back-button" onClick={goBack}><ArrowLeft size={16} /> Back to board</button>}><BoardPanel><ErrorState headline="Team board unavailable" body="This team's public board couldn't be loaded." retry={() => detailQuery.refetch()} /></BoardPanel></BoardLayout>
 
@@ -53,8 +60,9 @@ export function CentralTeam({ hardcodedTeamId }: { hardcodedTeamId?: string }) {
     <BoardLayout topbar={<div className="flex w-full items-center justify-between gap-3"><button className="back-button" onClick={goBack}><ArrowLeft size={16} /> <span className="hidden sm:inline">AARVAK TSJ 2026 DASHBOARD</span><span className="sm:hidden">Back</span></button><span className="label text-lamp">{DEMO_MODE ? 'PREVIEW' : 'PUBLIC BOARD'}</span></div>}>
       <section className={`team-hero team-hero--${team.slug}`}>
         <div><p className="label text-lamp">Team board / {team.slug}</p><h1 className="mt-3 font-display text-4xl font-black uppercase tracking-tight text-white sm:text-6xl">{team.name}<span className="text-lamp">.</span></h1><p className="mt-3 text-sm text-muted">Public progress, shared momentum. Individual totals stay private.</p></div>
-        <div className="team-total"><span className="label text-muted">Total points</span><strong>{team.total_points === null ? '—' : number.format(team.total_points)}</strong><span className="text-xs text-muted">verified team score</span></div>
+        <div className="team-total"><span className="label text-muted">Total points</span><strong>{team.total_points === null ? '—' : number.format(team.total_points)}</strong><span className="text-xs text-muted">verified team score</span><button type="button" onClick={() => void shareTeam()} className="mt-3 inline-flex items-center gap-2 text-xs text-lamp hover:text-white"><Share2 size={14} aria-hidden="true" /> Share public link</button></div>
       </section>
+      <Breadcrumbs current={team.name} locked />
       <div className="flex flex-col gap-3">
         <CentralNav />
         <ReadinessPanel demo={DEMO_MODE} />

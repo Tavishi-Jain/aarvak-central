@@ -16,6 +16,7 @@ export function ReadinessPanel({ demo, unavailable = false }: { demo: boolean; u
               ? 'This view is safe demo data. Connect Supabase and deploy the dashboard RPCs for live results.'
               : 'Supabase responded, but the required dashboard RPC is not deployed in this project yet.'}
         </p>
+        <p className="mt-2 text-[11px] uppercase tracking-wider text-dim">Last sync: {demo ? 'preview generated now' : ready ? 'just now' : 'waiting for deployment'}</p>
       </div>
     </div>
   )

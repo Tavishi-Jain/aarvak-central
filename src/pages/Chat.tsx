@@ -8,6 +8,7 @@ import { ReadinessPanel } from '../components/dashboard/ReadinessPanel'
 import { EmptyState, ErrorState } from '../components/feedback/EmptyState'
 import { Skeleton } from '../components/primitives/Skeleton'
 import { DEMO_MODE, supabase } from '../supabase'
+import { Breadcrumbs } from '../components/dashboard/Breadcrumbs'
 
 type ChatMessage = { id: string; author: string; body: string; created_at: string }
 const demoMessages: ChatMessage[] = [
@@ -41,6 +42,7 @@ export function Chat() {
   return (
     <BoardLayout topbar={<div className="flex w-full items-center justify-between"><span className="font-display text-sm font-bold tracking-sign text-chalk">AARVAK TSJ 2026 DASHBOARD</span><span className="label text-lamp">CHAT</span></div>}>
       <CentralNav />
+      <Breadcrumbs current="Member chat" />
       <ReadinessPanel demo={DEMO_MODE} unavailable={!DEMO_MODE && chatQuery.isError} />
       <BoardPanel padded={false}>
         <div className="border-b border-seam px-panel py-panel">

@@ -1,11 +1,21 @@
 import { BarChart3, Bell, LayoutDashboard, MessageCircle } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
-import { DEMO_MODE } from '../../supabase'
+import { DEMO_MODE, supabase } from '../../supabase'
+import { useQuery } from '@tanstack/react-query'
 
 const suffix = DEMO_MODE ? '?demo=1' : ''
 
 export function CentralNav() {
   const location = useLocation()
+  const unread = useQuery({
+    queryKey: ['nav-unread'],
+    queryFn: async () => {
+      if (DEMO_MODE) return { inbox: 1, chat: 1 }
+      const { data } = await supabase.rpc('get_my_notifications', { p_limit: 50, p_offset: 0 })
+      return { inbox: Array.isArray(data) ? data.filter((item: { read_at?: string | null }) => !item.read_at).length : 0, chat: 0 }
+    },
+    staleTime: 30_000,
+  })
   const links = [
     { href: `/central${suffix}`, label: 'Standings', icon: LayoutDashboard },
     { href: `/analytics${suffix}`, label: 'Activity', icon: BarChart3 },
@@ -29,7 +39,7 @@ export function CentralNav() {
             }`}
           >
             <Icon size={14} aria-hidden="true" />
-            {label}
+            {label}{((label === 'Inbox' && unread.data?.inbox) || (label === 'Chat' && unread.data?.chat)) ? <span className="nav-badge" aria-label={`${label} unread`}>{label === 'Inbox' ? unread.data?.inbox : unread.data?.chat}</span> : null}
           </Link>
         )
       })}
